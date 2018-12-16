@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.thoughtmechanix</groupId>
+  <artifactId>zuulsvr</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>Zuul Proxy Server</name>
+  <description>Zuul Proxy Server</description>
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>1.4.4.RELEASE</version>
+  </parent>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-dependencies</artifactId>
+        <version>Camden.SR5</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-zuul</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-eureka</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-config</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-config-client</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient</artifactId>
+      <version>4.5.2</version>
+    </dependency>
+
+  </dependencies>
+
+  <!--Docker build Config-->
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <start-class>com.thoughtmechanix.zuulsvr.ZuulServerApplication</start-class>
+    <java.version>1.8</java.version>
+    <!-- Usadas para especificar en el plugin cual es la imagen a crear -->
+    <docker.image.name>egsmartin/mirepositorio</docker.image.name>
+    <docker.image.tag>tmx-zuulsvr</docker.image.tag>
+    <!-- Version del plugin de spotify para crear la imagen de docker -->
+    <dockerfile-maven-version>1.4.9</dockerfile-maven-version>
+  </properties>
+
+  <build>
+     <plugins>
+         <!-- We use the Resources plugin to filer Dockerfile and run.sh, it inserts actual JAR filename -->
+         <!-- The final Dockerfile will be created in target/dockerfile/Dockerfile -->
+         <plugin>
+             <artifactId>maven-resources-plugin</artifactId>
+             <executions>
+                 <execution>
+                     <id>copy-resources</id>
+                     <!-- here the phase you need -->
+                     <phase>validate</phase>
+                     <goals>
+                         <goal>copy-resources</goal>
+                     </goals>
+                     <configuration>
+                         <outputDirectory>${basedir}/target/dockerfile</outputDirectory>
+                         <resources>
+                             <resource>
+                                 <directory>src/main/docker</directory>
+                                 <filtering>true</filtering>
+                             </resource>
+                         </resources>
+                     </configuration>
+                 </execution>
+                 <!-- Tambien necesitamos copiar en el directorio donde esta el docker file, el jar del MiSe
+                 que queremos ejecutar en la imagen. Como el jar solo esta disponible despues de compilar,
+                 la fase que tenemos que elegir is posterior a compile. Hemos elegido verify (en el README.md)
+                 he documentado todas las fases de Maven)-->
+                 <execution>
+                     <id>copy-jar</id>
+                     <!-- here the phase you need -->
+                     <phase>verify</phase>
+                     <goals>
+                         <goal>copy-resources</goal>
+                     </goals>
+                     <configuration>
+                         <outputDirectory>${basedir}/target/dockerfile</outputDirectory>
+                         <resources>
+							 <resource>
+                                 <directory>${basedir}/target</directory>
+								 <includes>
+						          <include>*.jar</include>
+						         </includes>
+                             </resource>
+                         </resources>
+                     </configuration>
+                 </execution>
+             </executions>
+         </plugin>
+         <!-- Este plugin se encarga de crear la imagen usando el docker file
+         Le tenemos que indicar que dokerfile usar y el nombre de la imagen que se tiene que crear -->
+         <plugin>
+			  <groupId>com.spotify</groupId>
+			  <artifactId>dockerfile-maven-plugin</artifactId>
+			  <version>${dockerfile-maven-version}</version>
+			  <executions>
+			    <execution>
+			      <id>default</id>
+			      <!-- Crearemos la imagen en la fase install. Para entonces todos los recursos que necesitamos
+			      para crear la imagen tienen que haber sido copiados en el directorio que usaremos como
+			      working directory para el plugin -->
+			      <phase>install</phase>
+			      <goals>
+			      	<!-- El plugin lo usaremos para a) crear la imagen, -->
+			        <goal>build</goal>
+			        <!-- y publicarla en el repositorio de Docker -->
+			        <goal>push</goal>
+			      </goals>
+			    </execution>
+			  </executions>
+			  <configuration>
+			   	<username>egsmartin</username>
+        		<password>Vera1511</password>
+        		<!-- Especificamos el nombre de la imagen y -->
+			    <repository>${docker.image.name}</repository>
+			    <!-- y su tag -->
+			    <tag>${docker.image.tag}</tag>
+			    <!-- Indicamos en que directorio esta el docker file y todos los recursos a los que el 
+			    docker file va a hacer referencia, como por ejemplo el jar del MiSe -->
+			    <contextDirectory>${basedir}/target/dockerfile</contextDirectory>
+			    <!-- En un docker file podemos crear argumentos. La idea es que en tiempo de creacion de la 
+			    imagen pasar por argumentos aquellos parametros que son dinamicos. Aqui hemos creado
+			    un argumento llamado ARCHIVO_JAR. En este proyecto en particular no hemos usado el argumento. 
+			    Hemos aprovechado la capacidad del plugin que copia recursos para reemplazar el valor de
+			    variables por su valor. No obstante en el MiSe Eureka si hemos usado esta tactica
+			    -->
+
+			    <buildArgs>
+			      <ARCHIVO_JAR>${project.build.finalName}.jar</ARCHIVO_JAR>
+			    </buildArgs>
+			  </configuration>
+			</plugin>
+         <plugin>
+             <groupId>org.springframework.boot</groupId>
+             <artifactId>spring-boot-maven-plugin</artifactId>
+         </plugin>
+     </plugins>
+  </build>
+</project>

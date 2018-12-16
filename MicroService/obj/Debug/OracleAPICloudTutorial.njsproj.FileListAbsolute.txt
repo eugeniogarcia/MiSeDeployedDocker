@@ -1,0 +1,2 @@
+C:\Users\Eugenio\Downloads\oracle_api\MicroService\obj\Debug\OracleAPICloudTutorial.njsproj.CoreCompileInputs.cache
+C:\Users\Eugenio\Downloads\oracle_api\MicroService\bin\Microsoft.NodejsTools.WebRole.dll
