@@ -18,10 +18,59 @@ post policies enforced on the calls.
 9.  A Kafka message bus to transport messages between services.
 10. A Redis service to act as a distributed cache.
 
+### pom
+On each MiSe we are to add a plugin that will create the image for the MiSe. Usaremos el plugin dockerfile-maven-plugin de spotify. 
+
+<plugin>
+  <groupId>com.spotify</groupId>
+  <artifactId>dockerfile-maven-plugin</artifactId>
+  <version>${dockerfile-maven-version}</version>
+
+this plugin will create as part of the maven phase´s (in our case we have configure it with the install phase) an image based on a dockerfile. We can configure the plugin so that not only the docker image is created (build) but that the image is published on a repository
+
+<goals> 
+  <goal>build</goal>
+  <goal>push</goal>
+
+On the plugin configuration we can specify the credentials and the repository:
+<configuration>
+<username>xxxx</username>
+<password>xxxx</password>
+<repository>${docker.image.name}</repository>
+<tag>${docker.image.tag}</tag>
+
+we specify also where the dockerfile can be found (togther with all the resources the dockerfile will need):
+<contextDirectory>${basedir}/target/dockerfile</contextDirectory>
+<buildArgs>
+  <ARCHIVO_JAR>${project.build.finalName}.jar</ARCHIVO_JAR>
+</buildArgs>
+
+To prepare the image using the dockerfile, we have to include in the folder where the docker file is, all the resources that are required. For this puerpose we can use the maven-resources plug in.
+
+<artifactId>maven-resources-plugin</artifactId>
+
+This plugin can be used to copy resources to the folder where we are preparing the "build" of the docker file, the so called docker context. We can add several executions of the plugin that will kick-off at different phases. For example, if we need to copy the jars, that would have to be copied after the jar is built. The docker file and other static files could be copied on an earlier phase.
+
+<executions>
+	<execution>
+		<id>copy-resources</id>
+		<phase>validate</phase>
+		<goals>
+			<goal>copy-resources</goal>
+		</goals>					 
+					 
+<execution>
+	<id>copy-jar</id>
+	<phase>verify</phase>
+	<goals>
+		<goal>copy-resources</goal>
+	</goals>
+
+### Note
+On the pom there are comments detailing the different steps
 
 ## NodeJs MiSe (Microservice)
 The Microservice uses a Mongo backing service also provided on a docker image. The docker-compose yml defines the two containers that are required, the one to build the image - using a docker file - for the NodeJS MiSe, and the image - to be fetched from a remote docker repository - that implements the Mongo backing service
-
 
 # Running the services
 
