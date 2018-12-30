@@ -19,6 +19,7 @@ docker push egsmartin/mirepositorio:MiSe
 #Podemos arrancar el contenedor (detachado)
 
 docker run -P egsmartin/mirepositorio:MiSe
+
 docker run -p 3000:3000 egsmartin/mirepositorio:MiSe
 
 #El problema es que como tiene que haber comunicación entre los dos contenedores, hay que hacer alguna configuración. Para evitarlo podemos usar docker-composer. Crea los dos contenedores, y los arranca en modo desatachado
