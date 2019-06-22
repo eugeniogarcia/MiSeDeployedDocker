@@ -4,7 +4,7 @@
 
   <groupId>com.thoughtmechanix</groupId>
   <artifactId>licensing-service</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>.0.0</version>
   <packaging>jar</packaging>
 
   <name>Eagle Eye Licensing Service </name>
@@ -13,28 +13,51 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>1.4.4.RELEASE</version>
+    <version>2.1.6.RELEASE</version>
   </parent>
+  
+    <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <java.version>1.8</java.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <start-class>com.thoughtmechanix.licenses.Application</start-class>
+    <!-- Usadas para especificar en el plugin cual es la imagen a crear -->
+    <docker.image.name>egsmartin/mirepositorio</docker.image.name>
+    <docker.image.tag>tmx-licensing-service</docker.image.tag>
+    
+    <!-- Version del plugin de spotify para crear la imagen de docker -->
+    <dockerfile-maven-version>1.4.10</dockerfile-maven-version>
+
+    <!-- Spring Versions-->
+    <springcloud>1.4.7.RELEASE</springcloud>
+    <springstream>2.2.0.RELEASE</springstream>
+    <springdata>2.1.9.RELEASE</springdata>
+    <springcloudclient>2.1.2.RELEASE</springcloudclient>   
+  </properties>
+  
   <dependencyManagement>
     <dependencies>
       <dependency>
         <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-dependencies</artifactId>
-        <version>Camden.SR5</version>
+        <version>Greenwich.RELEASE</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
+  
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
+    
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
+    
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
@@ -43,26 +66,31 @@
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-eureka</artifactId>
+      <version>${springcloud}</version>
     </dependency>
 
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-feign</artifactId>
+      <version>${springcloud}</version>
     </dependency>
 
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-config</artifactId>
+	  <version>${springcloudclient}</version>
     </dependency>
 
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-config-client</artifactId>
+	  <version>${springcloudclient}</version>
     </dependency>
 
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-hystrix</artifactId>
+      <version>${springcloud}</version>
     </dependency>
 
     <dependency>
@@ -80,24 +108,26 @@
     <dependency>
        <groupId>org.springframework.cloud</groupId>
        <artifactId>spring-cloud-stream</artifactId>
+      <version>${springstream}</version>
    </dependency>
 
    <dependency>
        <groupId>org.springframework.cloud</groupId>
        <artifactId>spring-cloud-starter-stream-kafka</artifactId>
+      <version>${springstream}</version>
    </dependency>
 
     <!--Spring Data Redis dependencies-->
     <dependency>
       <groupId>org.springframework.data</groupId>
       <artifactId>spring-data-redis</artifactId>
-      <version>1.7.4.RELEASE</version>
+      <version>${springdata}</version>
     </dependency>
 
     <dependency>
       <groupId>redis.clients</groupId>
       <artifactId>jedis</artifactId>
-      <version>2.9.0</version>
+      <version>3.0.1</version>
     </dependency>
 
     <dependency>
@@ -105,28 +135,18 @@
       <artifactId>commons-pool2</artifactId>
       <version>2.0</version>
     </dependency>
+    
     <dependency>
        <groupId>org.springframework.security</groupId>
        <artifactId>spring-security-rsa</artifactId>
     </dependency>
+    
       <dependency>
           <groupId>com.netflix.hystrix</groupId>
           <artifactId>hystrix-javanica</artifactId>
-          <version>1.5.9</version>
+          <version>1.5.18</version>
       </dependency>
   </dependencies>
-
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <java.version>1.8</java.version>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <start-class>com.thoughtmechanix.licenses.Application</start-class>
-    <!-- Usadas para especificar en el plugin cual es la imagen a crear -->
-    <docker.image.name>egsmartin/mirepositorio</docker.image.name>
-    <docker.image.tag>tmx-licensing-service</docker.image.tag>
-    <!-- Version del plugin de spotify para crear la imagen de docker -->
-    <dockerfile-maven-version>1.4.9</dockerfile-maven-version>
-  </properties>
 
   <build>
      <plugins>
