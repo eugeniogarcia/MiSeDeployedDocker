@@ -21,7 +21,7 @@
       <dependency>
         <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-dependencies</artifactId>
-        <version>Camden.SR5</version>
+        <version>Greenwich.RELEASE</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -41,11 +41,7 @@
     <dockerfile-maven-version>1.4.10</dockerfile-maven-version>
 
     <!-- Spring Versions-->
-    <springcloud>1.4.7.RELEASE</springcloud>
-    <springstream>2.2.0.RELEASE</springstream>
-    <springdata>2.1.9.RELEASE</springdata>
-    <springcloudclient>2.1.2.RELEASE</springcloudclient>   
-    
+    <neflix>1.4.7.RELEASE</neflix>
   </properties>
 
   <dependencies>
@@ -65,43 +61,39 @@
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-eureka</artifactId>
-      <version>${springcloud}</version>      
+      <version>${neflix}</version> 
     </dependency>
 
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-feign</artifactId>
-      <version>${springcloud}</version>      
+      <version>${neflix}</version>    
     </dependency>
 
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-config</artifactId>
-	  <version>${springcloudclient}</version>      
     </dependency>
 
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-config-client</artifactId>
-	  <version>${springcloudclient}</version>      
     </dependency>
 
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-hystrix</artifactId>
-      <version>${springcloud}</version>      
+      <version>${neflix}</version>
     </dependency>
 
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-stream</artifactId>
-      <version>${springstream}</version>      
     </dependency>
 
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-stream-kafka</artifactId>
-      <version>${springstream}</version>      
     </dependency>
 
     <dependency>
@@ -118,11 +110,10 @@
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-rsa</artifactId>
     </dependency>
-      <dependency>
+    <dependency>
           <groupId>com.netflix.hystrix</groupId>
           <artifactId>hystrix-javanica</artifactId>
-          <version>1.5.18</version>
-      </dependency>
+    </dependency>
   </dependencies>
 
   <build>

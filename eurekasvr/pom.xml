@@ -21,7 +21,7 @@
       <dependency>
         <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-dependencies</artifactId>
-        <version>Camden.SR5</version>
+        <version>Greenwich.RELEASE</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -39,18 +39,14 @@
     
     <!-- Version del plugin de spotify para crear la imagen de docker -->
     <dockerfile-maven-version>1.4.10</dockerfile-maven-version>
-
-    <!-- Spring Versions-->
-    <springcloud>1.4.7.RELEASE</springcloud>
-    <springstream>2.2.0.RELEASE</springstream>
-    <springdata>2.1.9.RELEASE</springdata>
+    <neflix>1.4.7.RELEASE</neflix>
   </properties>
   
   <dependencies>
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-eureka-server</artifactId>
-	  <version>${springcloud}</version>      
+      <version>${neflix}</version>      
     </dependency>
   </dependencies>
 

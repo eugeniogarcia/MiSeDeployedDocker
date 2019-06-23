@@ -29,7 +29,10 @@
     <dockerfile-maven-version>1.4.10</dockerfile-maven-version>
 
     <!-- Spring Versions-->
-    <neflix>1.4.7.RELEASE</neflix>
+    <springcloud>1.4.7.RELEASE</springcloud>
+    <springstream>2.2.0.RELEASE</springstream>
+    <springdata>2.1.9.RELEASE</springdata>
+    <springcloudclient>2.1.2.RELEASE</springcloudclient>   
   </properties>
   
   <dependencyManagement>
@@ -63,29 +66,31 @@
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-eureka</artifactId>
-      <version>${neflix}</version>
+      <version>${springcloud}</version>
     </dependency>
 
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-feign</artifactId>
-      <version>${neflix}</version>
+      <version>${springcloud}</version>
     </dependency>
 
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-config</artifactId>
+	  <version>${springcloudclient}</version>
     </dependency>
 
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-config-client</artifactId>
+	  <version>${springcloudclient}</version>
     </dependency>
 
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-hystrix</artifactId>
-      <version>${neflix}</version>
+      <version>${springcloud}</version>
     </dependency>
 
     <dependency>
@@ -103,27 +108,32 @@
     <dependency>
        <groupId>org.springframework.cloud</groupId>
        <artifactId>spring-cloud-stream</artifactId>
+      <version>${springstream}</version>
    </dependency>
 
    <dependency>
        <groupId>org.springframework.cloud</groupId>
        <artifactId>spring-cloud-starter-stream-kafka</artifactId>
+      <version>${springstream}</version>
    </dependency>
 
     <!--Spring Data Redis dependencies-->
     <dependency>
       <groupId>org.springframework.data</groupId>
       <artifactId>spring-data-redis</artifactId>
+      <version>${springdata}</version>
     </dependency>
 
     <dependency>
       <groupId>redis.clients</groupId>
       <artifactId>jedis</artifactId>
+      <version>3.0.1</version>
     </dependency>
 
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-pool2</artifactId>
+      <version>2.0</version>
     </dependency>
     
     <dependency>

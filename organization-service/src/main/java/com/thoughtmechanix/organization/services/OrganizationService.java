@@ -1,40 +1,41 @@
 package com.thoughtmechanix.organization.services;
 
-import com.thoughtmechanix.organization.events.source.SimpleSourceBean;
-import com.thoughtmechanix.organization.model.Organization;
-import com.thoughtmechanix.organization.repository.OrganizationRepository;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
+import com.thoughtmechanix.organization.events.source.SimpleSourceBean;
+import com.thoughtmechanix.organization.model.Organization;
+import com.thoughtmechanix.organization.repository.OrganizationRepository;
 
 @Service
 public class OrganizationService {
-    @Autowired
-    private OrganizationRepository orgRepository;
+	@Autowired
+	private OrganizationRepository orgRepository;
 
-    @Autowired
-    SimpleSourceBean simpleSourceBean;
+	@Autowired
+	SimpleSourceBean simpleSourceBean;
 
-    public Organization getOrg(String organizationId) {
-        return orgRepository.findById(organizationId);
-    }
+	public Organization getOrg(String organizationId) {
+		return orgRepository.findById(organizationId).get();
+	}
 
-    public void saveOrg(Organization org){
-        org.setId( UUID.randomUUID().toString());
+	public void saveOrg(Organization org){
+		org.setId( UUID.randomUUID().toString());
 
-        orgRepository.save(org);
-        simpleSourceBean.publishOrgChange("SAVE", org.getId());
-    }
+		orgRepository.save(org);
+		simpleSourceBean.publishOrgChange("SAVE", org.getId());
+	}
 
-    public void updateOrg(Organization org){
-        orgRepository.save(org);
-        simpleSourceBean.publishOrgChange("UPDATE", org.getId());
+	public void updateOrg(Organization org){
+		orgRepository.save(org);
+		simpleSourceBean.publishOrgChange("UPDATE", org.getId());
 
-    }
+	}
 
-    public void deleteOrg(String  orgId){
-        orgRepository.delete( orgId );
-        simpleSourceBean.publishOrgChange("DELETE", orgId);
-    }
+	public void deleteOrg(String  orgId){
+		orgRepository.deleteById( orgId );
+		simpleSourceBean.publishOrgChange("DELETE", orgId);
+	}
 }

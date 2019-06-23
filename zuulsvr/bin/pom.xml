@@ -3,12 +3,12 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.thoughtmechanix</groupId>
-  <artifactId>licensing-service</artifactId>
-  <version>.0.0</version>
+  <artifactId>zuulsvr</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>Eagle Eye Licensing Service </name>
-  <description>Licensing Service</description>
+  <name>Zuul Proxy Server</name>
+  <description>Zuul Proxy Server</description>
 
   <parent>
     <groupId>org.springframework.boot</groupId>
@@ -16,126 +16,67 @@
     <version>2.1.6.RELEASE</version>
   </parent>
   
-    <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <java.version>1.8</java.version>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <start-class>com.thoughtmechanix.licenses.Application</start-class>
-    <!-- Usadas para especificar en el plugin cual es la imagen a crear -->
-    <docker.image.name>egsmartin/mirepositorio</docker.image.name>
-    <docker.image.tag>tmx-licensing-service</docker.image.tag>
-    
-    <!-- Version del plugin de spotify para crear la imagen de docker -->
-    <dockerfile-maven-version>1.4.10</dockerfile-maven-version>
-
-    <!-- Spring Versions-->
-    <neflix>1.4.7.RELEASE</neflix>
-  </properties>
-  
   <dependencyManagement>
     <dependencies>
       <dependency>
         <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-dependencies</artifactId>
-        <version>Greenwich.RELEASE</version>
+        <version>Camden.SR5</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
+
+   <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <java.version>1.8</java.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <start-class>com.thoughtmechanix.zuulsvr.ZuulServerApplication</start-class>
+    <!-- Usadas para especificar en el plugin cual es la imagen a crear -->
+    <docker.image.name>egsmartin/mirepositorio</docker.image.name>
+    <docker.image.tag>tmx-zuulsvr</docker.image.tag>
+    
+    <!-- Version del plugin de spotify para crear la imagen de docker -->
+    <dockerfile-maven-version>1.4.10</dockerfile-maven-version>
+
+    <!-- Spring Versions-->
+    <springcloud>1.4.7.RELEASE</springcloud>
+    <springstream>2.2.0.RELEASE</springstream>
+    <springdata>2.1.9.RELEASE</springdata>
+    <springcloudclient>2.1.2.RELEASE</springcloudclient>    
+  </properties>
   
   <dependencies>
     <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-data-jpa</artifactId>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-zuul</artifactId>
     </dependency>
     
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-actuator</artifactId>
-    </dependency>
-
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-eureka</artifactId>
-      <version>${neflix}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework.cloud</groupId>
-      <artifactId>spring-cloud-starter-feign</artifactId>
-      <version>${neflix}</version>
-    </dependency>
+	  <version>${springcloud}</version>
+	</dependency>
 
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-config</artifactId>
-    </dependency>
+	  <version>${springcloudclient}</version>
+	</dependency>
 
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-config-client</artifactId>
+	  <version>${springcloudclient}</version>
     </dependency>
 
     <dependency>
-      <groupId>org.springframework.cloud</groupId>
-      <artifactId>spring-cloud-starter-hystrix</artifactId>
-      <version>${neflix}</version>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient</artifactId>
+      <version>4.5.2</version>
     </dependency>
 
-    <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>postgresql</groupId>
-      <artifactId>postgresql</artifactId>
-      <version>9.1-901.jdbc4</version>
-    </dependency>
-
-    <!--Spring Cloud Stream Dependencies-->
-    <dependency>
-       <groupId>org.springframework.cloud</groupId>
-       <artifactId>spring-cloud-stream</artifactId>
-   </dependency>
-
-   <dependency>
-       <groupId>org.springframework.cloud</groupId>
-       <artifactId>spring-cloud-starter-stream-kafka</artifactId>
-   </dependency>
-
-    <!--Spring Data Redis dependencies-->
-    <dependency>
-      <groupId>org.springframework.data</groupId>
-      <artifactId>spring-data-redis</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>redis.clients</groupId>
-      <artifactId>jedis</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-pool2</artifactId>
-    </dependency>
-    
-    <dependency>
-       <groupId>org.springframework.security</groupId>
-       <artifactId>spring-security-rsa</artifactId>
-    </dependency>
-    
-      <dependency>
-          <groupId>com.netflix.hystrix</groupId>
-          <artifactId>hystrix-javanica</artifactId>
-          <version>1.5.18</version>
-      </dependency>
   </dependencies>
 
   <build>
